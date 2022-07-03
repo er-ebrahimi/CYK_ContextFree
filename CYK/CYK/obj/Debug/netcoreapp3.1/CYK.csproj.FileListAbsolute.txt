@@ -1,0 +1,13 @@
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\bin\Debug\netcoreapp3.1\CYK.exe
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\bin\Debug\netcoreapp3.1\CYK.deps.json
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\bin\Debug\netcoreapp3.1\CYK.runtimeconfig.json
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\bin\Debug\netcoreapp3.1\CYK.runtimeconfig.dev.json
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\bin\Debug\netcoreapp3.1\CYK.dll
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\bin\Debug\netcoreapp3.1\CYK.pdb
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\obj\Debug\netcoreapp3.1\CYK.csproj.AssemblyReference.cache
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\obj\Debug\netcoreapp3.1\CYK.AssemblyInfoInputs.cache
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\obj\Debug\netcoreapp3.1\CYK.AssemblyInfo.cs
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\obj\Debug\netcoreapp3.1\CYK.csproj.CoreCompileInputs.cache
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\obj\Debug\netcoreapp3.1\CYK.dll
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\obj\Debug\netcoreapp3.1\CYK.pdb
+C:\Users\erfan\OneDrive\Documents\Daneshga\term4\nazarieMashinha\tamrin\project2\CYK_ContextFree\CYK\CYK\obj\Debug\netcoreapp3.1\CYK.genruntimeconfig.cache
