@@ -90,7 +90,7 @@ namespace CYK
                 string temp = Console.ReadLine();
                 int size = temp.IndexOf('-') + 3;
                 int size1 = temp.Length - temp.IndexOf('-') - 3;
-                List<string> temp2 =  temp.Substring(size, size1).Split(' ', '|').ToList();
+                List<string> temp2 =  temp.Substring(size, size1).Split(new string[] { " | " }, StringSplitOptions.None).ToList();
                 var.Add(temp.Substring(0, temp.IndexOf('-') - 1));
                 lan.Add(temp.Substring(0, temp.IndexOf('-') - 1), new List<List<string>>());
                 for (int k = 0; k < temp2.Count ; k++)
@@ -170,12 +170,11 @@ namespace CYK
                             {
                                 int ind = lan[var[i]][j].IndexOf(landa[z]);
                                 //lan[var[i]][j].RemoveAt(ind);
-                                if (lan[var[i]][j].Count == 1 & !landa.Contains(lan[var[i]][j][0]) & lan[var[i]][j][0][0] == '<')
+                                if (lan[var[i]][j].Count == 1 & landa.Contains(lan[var[i]][j][0]) & lan[var[i]][j][0][0] == '<')
                                 {
                                     //List<string> save = new List<string> { "#" };
                                     //lan[var[i]].Add(save);
                                     landa2.Add(var[i]);
-                                    lan[var[i]].RemoveAt(j);
                                     continue;
                                 }
                                 List<string> for_deleting = lan[var[i]][j].ToList();
@@ -192,22 +191,23 @@ namespace CYK
                 for (int j = 0; j < lan[var[i]].Count; j++)
                 {
 
-                    for (int z = 0; z < landa.Count; z++)
+                    if (lan[var[i]][j][0][0] == '<' && lan[var[i]][j].Count == 1)
                     {
-                        if (lan[var[i]][j].Contains(landa[z]))
+                        if (lan[var[i]][j][0] == var[i])
                         {
-                            int ind = lan[var[i]][j].IndexOf(landa[z]);
-                            //lan[var[i]][j].RemoveAt(ind);
-                            if (lan[var[i]][j].Count == 1 & !landa.Contains(lan[var[i]][j][0]) & lan[var[i]][j][0][0] == '<')
-                            {
-                                lan[var[i]].AddRange(lan[lan[var[i]][j][0]]);
-                                lan[var[i]].RemoveAt(j);
-                            }
+                            lan[var[i]].RemoveAt(j);
+                        }
+                        else if (lan.ContainsKey(lan[var[i]][j][0]))
+                        {
+                            string temp = lan[var[i]][j][0];
+                            lan[var[i]].RemoveAt(j);
+                            lan[var[i]].InsertRange(j, lan[temp]);
                         }
                     }
 
                 }
             }
+
             creating_string(str, lan, var);
         }
     }
