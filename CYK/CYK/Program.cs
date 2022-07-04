@@ -5,92 +5,79 @@ namespace CYK
 {
     class Program
     {
-        static void cykParse(List<string> w, Dictionary<string, List<List<string>>> lan)
+         static bool inserting(List<string> choosed_str, Dictionary<string, List<List<string>>> lan, List<string> var)
         {
-            int n = w.Count;
-
-            // Initialize the table
-            SortedDictionary<int, SortedDictionary<int, SortedSet<string>>> T = new SortedDictionary<int, SortedDictionary<int, SortedSet<string>>>();
-
-            // Filling in the table
-            for (int j = 0; j < n; j++)
+            if (var.Count <= choosed_str.Count)
             {
-
-                // Iterate over the rules
-                foreach (KeyValuePair<string, List<List<string>>> x in lan)
+                for (int i = 0; i < var.Count; i++)
                 {
-                    string lhs = x.Key;
-                    List<List<string>> rule = x.Value;
-
-                    foreach (List<string> rhs in rule)
+                    if (var[i][0] == '<')
                     {
-
-                        // If a terminal is found
-                        if (rhs.Count == 1 && rhs[0] == w[j])
+                        string oper = var[i];
+                        for (int j = 0; j < lan[oper].Count; j++)
                         {
-                            if (!T.ContainsKey(j))
+                            //var[i] = lan[oper][j];
+                            List<string> temp = var.ToList();
+                            temp.RemoveAt(i);
+                            temp.InsertRange(i, lan[oper][j]);
+                            if (inserting(choosed_str, lan, temp))
                             {
-                                T.Add(j, new SortedDictionary<int, SortedSet<string>>());
+                                return true;
                             }
-                            if (!T[j].ContainsKey(j))
-                            {
-                                T[j].Add(j, new SortedSet<string>());
-                            }
-                            T[j][j].Add(lhs);
-                        }
-                    }
-
-                }
-                for (int i = j; i >= 0; i--)
-                {
-
-                    // Iterate over the range from i to j
-                    for (int k = i; k <= j; k++)
-                    {
-
-                        // Iterate over the rules
-                        foreach (KeyValuePair<string, List<List<string>>> x in lan)
-                        {
-                            string lhs = x.Key;
-                            List<List<string>> rule = x.Value;
-
-                            foreach (List<string> rhs in rule)
-                            {
-                                // If a terminal is found
-                                if (rhs.Count == 2 &&
-                                    T.ContainsKey(i) &&
-                                    T[i].ContainsKey(k) &&
-                                    T[i][k].Contains(rhs[0]) &&
-                                    T.ContainsKey(k + 1) &&
-                                    T[k + 1].ContainsKey(j) &&
-                                    T[k + 1][j].Contains(rhs[1]))
-                                {
-                                    if (!T.ContainsKey(i))
-                                    {
-                                        T.Add(i, new SortedDictionary<int, SortedSet<string>>());
-                                    }
-                                    if (!T[i].ContainsKey(j))
-                                    {
-                                        T[i].Add(j, new SortedSet<string>());
-                                    }
-                                    T[i][j].Add(lhs);
-                                }
-                            }
-
                         }
                     }
                 }
             }
-            // If word can be formed by rules
-            // of given grammar
-            if (T.ContainsKey(0) && T[0].ContainsKey(n - 1) && T[0][n - 1].Count != 0)
+            for (int i = 0; i < choosed_str.Count; i++)
             {
-                Console.Write("True\n");
+                try
+                {
+                    if (choosed_str[i] != var[i])
+                    {
+                        return false;
+                    }
+                    else if (i == var.Count - 1 & i == choosed_str.Count - 1)
+                    {
+                        return true;
+                    }
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return false;
+                    throw;
+                }
+                
             }
-            else
-            {
-                Console.Write("False\n");
-            }
+            return false;
+        }
+        static void creating_string(List<string> choosed_str, Dictionary<string, List<List<string>>> lan, List<string> var)
+        {
+
+            List<List<string>> table = new List<List<string>>();
+            List<string> created = new List<string>();
+
+                for (int j = 0; j < lan[var[0]].Count; j++)
+                {
+                    for (int k = 0; k < lan[var[0]][j].Count; k++)
+                    {
+                        if (created.Count + lan[var[0]][j].Count <= choosed_str.Count)
+                        {
+                            created.AddRange(lan[var[0]][j]);
+                            List<string> answer = new List<string>();
+                            if (inserting(choosed_str, lan, created))
+                            {
+                                Console.WriteLine("Accepted");
+                                return;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Rejected");
+                                return;
+                            }
+                        }
+                    }
+                }
+            
         }
         static void Main(string[] args)
         {
@@ -103,7 +90,7 @@ namespace CYK
                 string temp = Console.ReadLine();
                 int size = temp.IndexOf('-') + 3;
                 int size1 = temp.Length - temp.IndexOf('-') - 3;
-                List<string> temp2 =  temp.Substring(size, size1).Split(" | ").ToList();
+                List<string> temp2 =  temp.Substring(size, size1).Split(' ', '|').ToList();
                 var.Add(temp.Substring(0, temp.IndexOf('-') - 1));
                 lan.Add(temp.Substring(0, temp.IndexOf('-') - 1), new List<List<string>>());
                 for (int k = 0; k < temp2.Count ; k++)
@@ -183,7 +170,7 @@ namespace CYK
                             {
                                 int ind = lan[var[i]][j].IndexOf(landa[z]);
                                 //lan[var[i]][j].RemoveAt(ind);
-                                if (lan[var[i]][j].Count == 1 & !landa.Contains(lan[var[i]][j][0]) )
+                                if (lan[var[i]][j].Count == 1 & !landa.Contains(lan[var[i]][j][0]) & lan[var[i]][j][0][0] == '<')
                                 {
                                     //List<string> save = new List<string> { "#" };
                                     //lan[var[i]].Add(save);
@@ -200,8 +187,28 @@ namespace CYK
                     }
                 }
             }
-            
-            cykParse(str, lan);
+            for (int i = 0; i < lan.Count; i++)
+            {
+                for (int j = 0; j < lan[var[i]].Count; j++)
+                {
+
+                    for (int z = 0; z < landa.Count; z++)
+                    {
+                        if (lan[var[i]][j].Contains(landa[z]))
+                        {
+                            int ind = lan[var[i]][j].IndexOf(landa[z]);
+                            //lan[var[i]][j].RemoveAt(ind);
+                            if (lan[var[i]][j].Count == 1 & !landa.Contains(lan[var[i]][j][0]) & lan[var[i]][j][0][0] == '<')
+                            {
+                                lan[var[i]].AddRange(lan[lan[var[i]][j][0]]);
+                                lan[var[i]].RemoveAt(j);
+                            }
+                        }
+                    }
+
+                }
+            }
+            creating_string(str, lan, var);
         }
     }
 }
