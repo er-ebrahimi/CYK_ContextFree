@@ -5,38 +5,17 @@ namespace CYK
 {
     class Program
     {
-         static bool inserting(List<string> choosed_str, Dictionary<string, List<List<string>>> lan, List<string> var)
+        static bool check_twoList(List<string> one, List<string> two)
         {
-            if (var.Count <= choosed_str.Count)
-            {
-                for (int i = 0; i < var.Count; i++)
-                {
-                    if (var[i][0] == '<')
-                    {
-                        string oper = var[i];
-                        for (int j = 0; j < lan[oper].Count; j++)
-                        {
-                            //var[i] = lan[oper][j];
-                            List<string> temp = var.ToList();
-                            temp.RemoveAt(i);
-                            temp.InsertRange(i, lan[oper][j]);
-                            if (inserting(choosed_str, lan, temp))
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-            for (int i = 0; i < choosed_str.Count; i++)
+            for (int i = 0; i < one.Count; i++)
             {
                 try
                 {
-                    if (choosed_str[i] != var[i])
+                    if (one[i] != two[i])
                     {
                         return false;
                     }
-                    else if (i == var.Count - 1 & i == choosed_str.Count - 1)
+                    else if (i == two.Count - 1 & i == one.Count - 1)
                     {
                         return true;
                     }
@@ -46,38 +25,95 @@ namespace CYK
                     return false;
                     throw;
                 }
-                
+
             }
             return false;
         }
+         static bool inserting(List<string> choosed_str, Dictionary<string, List<List<string>>> lan, List<string> var)
+        {
+            if (var.Count > choosed_str.Count)
+            {
+                return false;
+            }
+            else if (var.Count == choosed_str.Count)
+            {
+                if (check_twoList(choosed_str, var))
+                {
+                    return true;
+                }
+            }
+            if (choosed_str.Count >= var.Count)
+            {
+                for (int i = 0; i < var.Count; i++)
+                {
+                    if (var[i][0] == '<')
+                    {
+                        for (int j = 0; j < lan[var[i]].Count; j++)
+                        {
+                            List<string> temp = var.ToList();
+                            temp.RemoveAt(i);
+                            temp.InsertRange(i, lan[var[i]][j]);
+                            if (inserting(choosed_str, lan, temp))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            
+
+            return false;
+           
+        }
+
         static void creating_string(List<string> choosed_str, Dictionary<string, List<List<string>>> lan, List<string> var)
         {
 
             List<List<string>> table = new List<List<string>>();
             List<string> created = new List<string>();
-
+            bool flag = false;
                 for (int j = 0; j < lan[var[0]].Count; j++)
                 {
-                    for (int k = 0; k < lan[var[0]][j].Count; k++)
-                    {
+
                         if (created.Count + lan[var[0]][j].Count <= choosed_str.Count)
                         {
-                            created.AddRange(lan[var[0]][j]);
+                            created = lan[var[0]][j].ToList();
                             List<string> answer = new List<string>();
                             if (inserting(choosed_str, lan, created))
                             {
-                                Console.WriteLine("Accepted");
-                                return;
+                                flag = true;
                             }
-                            else
-                            {
-                                Console.WriteLine("Rejected");
-                                return;
-                            }
+                            created.Clear();
                         }
-                    }
+                    
                 }
+            if (flag)
+            {
+                Console.WriteLine("Accepted");
+                return;
+            }
+            else
+            {
+                Console.WriteLine("Rejected");
+                return;
+            }
+        }
+        static bool check_unit(List<List<string>> vs)
+        {
+
+                int size = vs.Count;
+            for (int j = 0; j < size; j++)
+            {
+
+                if (vs[j][0][0] == '<' && vs[j].Count == 1)
+                {
+                    return true;
+                }
+
+            }
             
+            return false;
         }
         static void Main(string[] args)
         {
@@ -132,6 +168,7 @@ namespace CYK
                 }
                 
             }
+
             string input = Console.ReadLine();
             List<string> str = input.ToCharArray().Select(x => x.ToString()).ToList();
             List<string> landa = new List<string>();//save variables which has #
@@ -179,34 +216,80 @@ namespace CYK
                                 }
                                 List<string> for_deleting = lan[var[i]][j].ToList();
                                 for_deleting.RemoveAt(ind);
-                                lan[var[i]].Add(for_deleting);
+                                if (!lan[var[i]].Contains(for_deleting))
+                                {
+                                    lan[var[i]].Add(for_deleting);
+
+                                }
+                                
                             }
                         }
 
                     }
                 }
             }
+            //fro deleting <D> -> <D>
             for (int i = 0; i < lan.Count; i++)
             {
-                for (int j = 0; j < lan[var[i]].Count; j++)
+                int size = lan[var[i]].Count;
+                for (int j = 0; j < size; j++)
                 {
 
                     if (lan[var[i]][j][0][0] == '<' && lan[var[i]][j].Count == 1)
                     {
+
                         if (lan[var[i]][j][0] == var[i])
                         {
                             lan[var[i]].RemoveAt(j);
+                            if (lan[var[i]].Count == 0)
+                            {
+                                lan.Remove(var[i]);
+                                var.Remove(var[i]);
+                            }
+
                         }
-                        else if (lan.ContainsKey(lan[var[i]][j][0]))
-                        {
-                            string temp = lan[var[i]][j][0];
-                            lan[var[i]].RemoveAt(j);
-                            lan[var[i]].InsertRange(j, lan[temp]);
-                        }
+
                     }
 
                 }
             }
+            //bool flag1 = true ;
+            //while (flag1)
+            //{
+            //    flag1 = false;
+            //    for (int i = 0; i < lan.Count; i++)
+            //    {
+            //        int size = lan[var[i]].Count;
+            //        for (int j = 0; j < size; j++)
+            //        {
+
+            //            if (lan[var[i]][j][0][0] == '<' && lan[var[i]][j].Count == 1)
+            //            {
+
+            //                if (lan[var[i]][j][0] == var[i])
+            //                {
+            //                    lan[var[i]].RemoveAt(j);
+            //                    if (lan[var[i]].Count == 0)
+            //                    {
+            //                        lan.Remove(var[i]);
+            //                        var.Remove(var[i]);
+            //                    }
+
+            //                }
+            //                else if (lan.ContainsKey(lan[var[i]][j][0]))
+            //                {
+            //                    string temp = lan[var[i]][j][0];
+            //                    lan[var[i]].RemoveAt(j);
+            //                    lan[var[i]].InsertRange(j, lan[temp]);
+            //                    size = lan[var[i]].Count;
+            //                }
+
+            //            }
+
+            //        }
+            //    }
+            //}
+
 
             creating_string(str, lan, var);
         }
